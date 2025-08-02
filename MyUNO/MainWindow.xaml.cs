@@ -21,7 +21,7 @@ namespace MyUNO
         public MainWindow()
         {
             InitializeComponent();
-
+            
 
         }
         private void Button1_Click(object sender, RoutedEventArgs e)
@@ -69,12 +69,12 @@ namespace MyUNO
             MessageBox.Show(TryDrawOneCardAndShow());
         }
     }
-    public enum UnoColor
+    public enum UnoColor 
     {
         Red, Green, Blue, Yellow, Wild,
         ErrorColor = 9999
     }
-    public enum UnoValue
+    public enum UnoValue    
     {
         Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine,
         Skip = 50, Reverse = 51, DrawTwo = 52,
@@ -227,6 +227,7 @@ namespace MyUNO
     }
     public class CardList
     {
+        //Warning, more logic to be added, now it is just a simple list.
         public List<UnoCard> cardsList = new List<UnoCard>();
         public void AddCard(UnoCard card)
         {
@@ -295,7 +296,7 @@ namespace MyUNO
                 if (card.Item1.Value == UnoValue.Reverse)
                 {
                     value = value * 0.9f;
-                }
+            }
 
                 result[i] = (card.Item1, value);
             }
@@ -332,9 +333,38 @@ namespace MyUNO
             }
             return result;
         }
-        //Let's coding the mainGame logic.
+        
 
-    }
+        public static List<(UnoCard, float)> ReweightByCardList(List<(UnoCard, float)> scoreList, CardList thisTurn)
+        {
+            //More wild draw four, more draw two, AI will more like to play drawfour/ drawtwo.
+            List<(UnoCard, float)> result = scoreList;
+            int countWildDrawFour = 0;
+            //Maybe AI will think about more about color and value. Todo.
+            float addtionalWeight = 1.0f; //A small weight to add.
+            foreach (UnoCard card in thisTurn.cardsList)
+            {
+                if (card.Value == UnoValue.WildDrawFour)
+                {
+                    addtionalWeight *= 2f; //Add more weight for these cards.
+                    countWildDrawFour++;
+                    addtionalWeight *= (float)(countWildDrawFour-1)*2;
+                }
+                if (card.Value == UnoValue.DrawTwo)
+                {
+                    addtionalWeight *= 1.5f; //Add more weight for these cards.
+                }
+            }
+            for(int i = 0; i<result.Count;i++)
+            {
+                if (result[i].Item1.Value == UnoValue.WildDrawFour || result[i].Item1.Value == UnoValue.DrawTwo)
+                {
+                    float renewedWeight = result[i].Item2 * addtionalWeight;
+                    result[i]=(result[i].Item1, renewedWeight);
+                }
+            }
+            return result;
+        }
 
     public class MainUnoGame
     {
@@ -390,12 +420,12 @@ namespace MyUNO
                             chosenCard = card; //Found the card.
                             break;
                         }
-                    }
+    }
                 }
             }
         }
 
-
+    
 
 
         public void InitializeGame(out UnoCard drawnCard)
@@ -408,7 +438,7 @@ namespace MyUNO
                     if (deck.TryDraw(out UnoCard card))
                     {
                         players[i].hand.AddCard(card);
-                    }
+    }
                     else
                     {
                         Console.WriteLine("No cards left to draw.");
