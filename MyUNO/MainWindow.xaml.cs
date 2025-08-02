@@ -296,7 +296,7 @@ namespace MyUNO
                 if (card.Item1.Value == UnoValue.Reverse)
                 {
                     value = value * 0.9f;
-            }
+                }
 
                 result[i] = (card.Item1, value);
             }
@@ -333,7 +333,10 @@ namespace MyUNO
             }
             return result;
         }
-        
+        // Notice: Every card exactly have mutipled 1.5 and 1.2
+        //
+        // ,so original score become 10 * 1.5 * 1.2 = 18.
+
 
         public static List<(UnoCard, float)> ReweightByCardList(List<(UnoCard, float)> scoreList, CardList thisTurn)
         {
@@ -348,23 +351,24 @@ namespace MyUNO
                 {
                     addtionalWeight *= 2f; //Add more weight for these cards.
                     countWildDrawFour++;
-                    addtionalWeight *= (float)(countWildDrawFour-1)*2;
+                    addtionalWeight *= (float)(countWildDrawFour - 1) * 2;
                 }
                 if (card.Value == UnoValue.DrawTwo)
                 {
                     addtionalWeight *= 1.5f; //Add more weight for these cards.
                 }
             }
-            for(int i = 0; i<result.Count;i++)
+            for (int i = 0; i < result.Count; i++)
             {
                 if (result[i].Item1.Value == UnoValue.WildDrawFour || result[i].Item1.Value == UnoValue.DrawTwo)
                 {
                     float renewedWeight = result[i].Item2 * addtionalWeight;
-                    result[i]=(result[i].Item1, renewedWeight);
+                    result[i] = (result[i].Item1, renewedWeight);
                 }
             }
             return result;
         }
+    }
 
     public class MainUnoGame
     {
