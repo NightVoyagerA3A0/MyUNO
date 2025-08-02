@@ -21,7 +21,7 @@ namespace MyUNO
         public MainWindow()
         {
             InitializeComponent();
-
+            
 
         }
         private void Button1_Click(object sender, RoutedEventArgs e)
@@ -69,12 +69,12 @@ namespace MyUNO
             MessageBox.Show(TryDrawOneCardAndShow());
         }
     }
-    public enum UnoColor
+    public enum UnoColor 
     {
         Red, Green, Blue, Yellow, Wild,
         ErrorColor = 9999
     }
-    public enum UnoValue
+    public enum UnoValue    
     {
         Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine,
         Skip = 50, Reverse = 51, DrawTwo = 52,
@@ -295,7 +295,7 @@ namespace MyUNO
                 if (card.Item1.Value == UnoValue.Reverse)
                 {
                     value = value * 0.9f;
-                }
+            }
 
                 result[i] = (card.Item1, value);
             }
@@ -390,12 +390,12 @@ namespace MyUNO
                             chosenCard = card; //Found the card.
                             break;
                         }
-                    }
+    }
                 }
             }
         }
 
-
+    
 
 
         public void InitializeGame(out UnoCard drawnCard)
@@ -408,7 +408,7 @@ namespace MyUNO
                     if (deck.TryDraw(out UnoCard card))
                     {
                         players[i].hand.AddCard(card);
-                    }
+    }
                     else
                     {
                         Console.WriteLine("No cards left to draw.");
